@@ -2,19 +2,6 @@
 
 A C++ CLI tool that converts DNA sequences to random-projected vectors for comparative genomics and sequence similarity analysis.
 
-## Pipeline
-
-The tool integrates three steps:
-
-1. **Sketching**: Generates k-mer signatures using sourmash
-   - Default: k=31, scaled=1000
-   
-2. **Hashing**: Extracts min-hashes from the signature
-   
-3. **Projection**: Applies random projection to reduce to fixed-dimensional vectors
-   - Default dimension: 2048
-   - Output format: Byte-packed binary (.bin)
-
 ## Requirements
 
 - C++ compiler (g++ 7+)
@@ -23,32 +10,23 @@ The tool integrates three steps:
 
 ## Installation
 
-### Install Dependencies
-
-**Ubuntu/Debian:**
-```bash
-sudo apt-get install build-essential
-```
-
-**macOS:**
-```bash
-brew install make
-```
-
-### Install sourmash
+### Dependencies
 ```bash
 conda install -c bioconda sourmash
 # or
 pip install sourmash
 ```
 
-## Building
+## Download and Build
 
+Clone the repository and build the project:
 ```bash
+git clone https://github.com/RolandFaure/DNA_to_vector.git
+cd DNA_to_vector
 make
 ```
 
-Executables will be created in `bin/` directory.
+Executables will be created in the `DNA_to_vector/bin/` directory.
 
 ## Usage
 
@@ -57,33 +35,20 @@ Executables will be created in `bin/` directory.
 ./bin/dna_to_vector <input.fa> <output.bin>
 ```
 
-### With Options
-```bash
-./bin/dna_to_vector <input.fa> <output.bin> [options]
-```
-
 ### Options
+- `-m, --mode <M>` — Processing mode: `reads` or `assembly` (default: `assembly`)
+  - `assembly`: Use all k-mers from the sketch
+  - `reads`: Keep only k-mers with abundance ≥ 2 (filters out single-occurrence k-mers, useful for noisy read data)
 - `-d, --dim <N>` — Target dimension for random projection (default: 2048)
 - `-k <N>` — K-mer size for sourmash (default: 31)
 - `-s <N>` — Scaled factor for sourmash (default: 1000)
 - `-h, --help` — Show help message
 
-### Examples
 
-Default parameters:
-```bash
-./bin/dna_to_vector dataset.unitigs.fa output_vector.bin
-```
+## Modes Explained
 
-Custom dimension:
-```bash
-./bin/dna_to_vector genome.fa output.bin -d 4096
-```
-
-Different sourmash parameters:
-```bash
-./bin/dna_to_vector genome.fa output.bin -k 21 -s 500
-```
+- `assembly`: Uses all k-mers detected in the input file.
+- `reads`: Filters k-mers by abundance, keeping only those seen 2 or more times. This is useful for sequencing reads, which often contain errors that manifest as unique k-mers (seen only once). By filtering out these singletons, noise is reduced.
 
 ## Output Format
 
@@ -104,23 +69,18 @@ The `.bin` file contains a byte-packed vector where:
 └── README.md                   # This file
 ```
 
-## Development
+## Pipeline
 
-### Building from Source
-```bash
-make clean
-make
-```
+The tool integrates three steps:
 
-### Cleaning Build Artifacts
-```bash
-make clean
-```
-
-### Help
-```bash
-make help
-```
+1. **Sketching**: Generates k-mer signatures using sourmash
+   - Default: k=31, scaled=1000
+   
+2. **Hashing**: Extracts min-hashes from the signature
+   
+3. **Projection**: Applies random projection to reduce to fixed-dimensional vectors
+   - Default dimension: 2048
+   - Output format: Byte-packed binary (.bin)
 
 ## License
 
