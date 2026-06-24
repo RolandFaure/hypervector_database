@@ -205,7 +205,7 @@ int main(int argc, char* argv[]) {
                                 input_file + "\" -o \"" + sketch_file + "\" 2>/dev/null";
         
         if (run_command(sketch_cmd) != 0) {
-            throw std::runtime_error("Failed to generate sourmash sketch. Make sure sourmash is installed.");
+            throw std::runtime_error("Failed to generate sourmash sketch. Make sure sourmash is installed. Tried command: " + sketch_cmd);
         }
         
         if (!fs::exists(sketch_file)) {

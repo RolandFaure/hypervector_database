@@ -5,6 +5,12 @@ CXXFLAGS = -std=c++17 -Wall -Wextra -O2 -fPIC
 CPPFLAGS = -I./include
 LDFLAGS =
 
+# GCC 8 and older require an explicit filesystem library at link time.
+GCC_MAJOR := $(shell $(CXX) -dumpversion | cut -d. -f1)
+ifeq ($(shell [ $(GCC_MAJOR) -lt 9 ] && echo yes),yes)
+LDFLAGS += -lstdc++fs
+endif
+
 # Directories
 SRC_DIR = src
 INC_DIR = include
