@@ -1,4 +1,18 @@
-# DNA to Vector Conversion
+# 🧬 Hypervectors database
+
+This repository provides the hypervector database and the code needed to interact with it.
+
+The database is downloadable [here](https://drive.proton.me/urls/M9SG6CJ37W#IZz0B0LoLvX8)
+```
+wget https://drive.proton.me/urls/M9SG6CJ37W#IZz0B0LoLvX8
+```
+
+In the database, you will find four files.
+- dimension.txt contains a single number, the dimension of the hypervectors (should be 2048)
+- metadata.txt contains the list of all accessions with their corresponding metadata
+- vectors.bin contains all the hypervectors. The hypervectors are stored in a byte format: each vector is a concatenation of 2048 int32. Each value is stored as an int for convenience but should be divided by sqrt(2048) when used. The file is the concatenation of the hypervectors. 
+
+[NOTE: this is a temporary small database for testing]
 
 A C++ CLI tool that converts DNA sequences to random-projected vectors for comparative genomics and sequence similarity analysis.
 
