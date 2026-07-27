@@ -1,39 +1,47 @@
 # 🧬 Hypervectors database
 
-This repository provides the hypervector database and the code needed to interact with it.
+This repository provides the hypervector database and the code needed to interact with it. The fundamental property of hypervectors is that the dot product between the hypervectors of datasets A and B is the size of their intersection.
 
-The database is downloadable [here](https://drive.proton.me/urls/M9SG6CJ37W#IZz0B0LoLvX8)
+## Database Download
+
+The database is downloadable [here](https://drive.proton.me/urls/M9SG6CJ37W#IZz0B0LoLvX8):
+
 ```
 wget https://drive.proton.me/urls/M9SG6CJ37W#IZz0B0LoLvX8
 ```
 
-In the database, you will find four files.
-- dimension.txt contains a single number, the dimension of the hypervectors (should be 2048)
-- metadata.txt contains the list of all accessions with their corresponding metadata
-- vectors.bin contains all the hypervectors. The hypervectors are stored in a byte format: each vector is a concatenation of 2048 int32. Each value is stored as an int for convenience but should be divided by sqrt(2048) when used. The file is the concatenation of the hypervectors. 
+### Database Contents
 
-[NOTE: this is a temporary small database for testing]
+In the database, you will find four files:
 
-A C++ CLI tool that converts DNA sequences to random-projected vectors for comparative genomics and sequence similarity analysis.
+- **dimension.txt** — Contains a single number representing the dimension of the hypervectors (should be 2048)
+- **metadata.txt** — Contains the list of all accessions with their corresponding metadata
+- **vectors.bin** — Contains all the hypervectors in byte format. Each vector is a concatenation of 2048 int32 values. Each value is stored as an int for convenience but should be divided by sqrt(2048) when used. The file is the concatenation of the hypervectors in the order described in metadata.txt
+- **vector_norms.txt** — A TSV file containing the norm of all the hypervectors
 
-## Requirements
+**Note:** This is a temporary small database for testing purposes.
 
-- C++ compiler (g++ 7+)
-- sourmash (with Python/conda environment)
-- Make
+## Interacting with the Database
 
-## Installation
+This repository contains scripts and tutorials for interacting with the database. Specifically, it includes:
 
-### Dependencies
+- (Scripts to sketch your own datasets)[#creating-hypervectors-of-your-datasets]
+- (Tools to compare sketched datasets against all SRA datasets published before December 2023)[#comparing-datasets-against-the-database]
+
+### Installation
+
+#### Download and Build
+
+Install the required dependencies:
+
 ```bash
 conda install -c bioconda sourmash
 # or
 pip install sourmash
 ```
 
-## Download and Build
-
 Clone the repository and build the project:
+
 ```bash
 git clone https://github.com/RolandFaure/DNA_to_vector.git
 cd DNA_to_vector
@@ -42,59 +50,56 @@ make
 
 Executables will be created in the `DNA_to_vector/bin/` directory.
 
-## Usage
+### Creating Hypervectors of Your Datasets
 
-### Basic Usage
+#### Basic Usage
+
 ```bash
 ./bin/dna_to_vector <input.fa> <output.bin>
 ```
 
-### Options
+#### Options
+
 - `-m, --mode <M>` — Processing mode: `reads` or `assembly` (default: `assembly`)
-  - `assembly`: Use all k-mers from the sketch
-  - `reads`: Keep only k-mers with abundance ≥ 2 (filters out single-occurrence k-mers, useful for noisy read data)
+  - `assembly`: Use all k-mers from the dataset
+  - `reads`: Keep only k-mers with abundance ≥ 2 (filters out single-occurrence k-mers)
 - `-d, --dim <N>` — Target dimension for random projection (default: 2048)
 - `-k <N>` — K-mer size for sourmash (default: 31)
 - `-s <N>` — Scaled factor for sourmash (default: 1000)
 - `-h, --help` — Show help message
 
+**Note:** Do not change `-d`, `-k`, or `-s` if you want to interact with the downloadable database.
 
-## Modes Explained
+#### Modes Explained
 
-- `assembly`: Uses all k-mers detected in the input file.
-- `reads`: Filters k-mers by abundance, keeping only those seen 2 or more times. This is useful for sequencing reads, which often contain errors that manifest as unique k-mers (seen only once). By filtering out these singletons, noise is reduced.
+- **assembly**: Uses all k-mers detected in the input file.
+- **reads**: Filters k-mers by abundance, keeping only those seen 2 or more times. This is useful for sequencing reads, which often contain errors that manifest as unique k-mers (seen only once). Filtering out these singletons reduces noise.
 
-## Output Format
+#### Output Format
 
-The `.bin` file contains a byte-packed vector where:
-- First 4 bytes: vector size (int32)
-- Following bytes: each vector component (0-255)
+The `.bin` file contains a byte-packed vector where each value is stored as an int32. Values should be divided by sqrt(d) before local usage or uploaded as such in other commands of this tool suite.
 
-## Project Structure
+### Comparing Datasets Against the Database
 
+To find SRA accessions with the highest Jaccard similarity to your dataset(s):
+
+1. Sketch your dataset(s) using the script above
+2. If you have multiple hypervectors, concatenate them into a single bin file
+3. Run the `query` script:
+
+```bash
+./bin/query --query <file> --db <folder> --output <file> \
+            [--num_threads <int>] [--top_k <int>] [--help]
 ```
-.
-├── src/
-│   ├── main.cpp                # CLI entry point & pipeline orchestration
-│   └── random_projection.cpp   # Random projection implementation
-├── include/
-│   └── random_projection.h     # Random projection interface
-├── Makefile                    # Build configuration
-└── README.md                   # This file
-```
 
-## Pipeline
+This returns a TSV file with the top `k` most similar accessions in the SRA (up to 2023) ranked by Jaccard similarity. The three columns are:
+- Index of your query (if multiple hypervectors were queried)
+- Accession hit
+- Jaccard similarity
 
-The tool integrates three steps:
+### Tutorial
 
-1. **Sketching**: Generates k-mer signatures using sourmash
-   - Default: k=31, scaled=1000
-   
-2. **Hashing**: Extracts min-hashes from the signature
-   
-3. **Projection**: Applies random projection to reduce to fixed-dimensional vectors
-   - Default dimension: 2048
-   - Output format: Byte-packed binary (.bin)
+For detailed usage examples and tutorials, please refer to the documentation included in the repository.
 
 ## License
 
