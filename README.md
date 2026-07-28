@@ -43,19 +43,19 @@ pip install sourmash
 Clone the repository and build the project:
 
 ```bash
-git clone https://github.com/RolandFaure/DNA_to_vector.git
-cd DNA_to_vector
+git clone https://github.com/RolandFaure/hypervector_database.git
+cd hypervector_database
 make
 ```
 
-Executables will be created in the `DNA_to_vector/bin/` directory.
+Executables will be created in the `hypervector_database/bin/` directory.
 
 ### Creating Hypervectors of Your Datasets
 
 #### Basic Usage
 
 ```bash
-./bin/dna_to_vector <input.fa> <output.bin>
+./bin/hypervector_database <input.fa> <output.bin>
 ```
 
 #### Options
@@ -97,9 +97,28 @@ This returns a TSV file with the top `k` most similar accessions in the SRA (up 
 - Accession hit
 - Jaccard similarity
 
-### Tutorial
+## Tutorial
 
-For detailed usage examples and tutorials, please refer to the documentation included in the repository.
+Let's find the most similar SRA datasets to DRR018843. In practice, this will work with any dataset.
+First, download the DRR018843 reads:
+
+```bash
+fastq-dump DRR018843
+#or go on https://trace.ncbi.nlm.nih.gov/Traces/?view=run_browser&acc=DRR018843 and manually download
+```
+
+Then, sketch the dataset to create a hypervector. Use the `reads` mode since this is a sequencing dataset, in order to filter out single-occurrence k-mers, which likely represent sequencing errors:
+
+```bash
+path/to/hypervector_database/bin/hypervector_database DRR018843.fastq DRR018843.bin -m reads
+```
+
+Finally, query the hypervector against the database to obtain the top 100 most similar SRA datasets:
+
+```bash
+path/to/hypervector_database/bin/query --query DRR018843.bin --db path/to/hypervector_database --output DRR018843_results.tsv --top_k 100
+```
+
 
 ## License
 

@@ -85,7 +85,7 @@ MatrixXll compute_all_dot_products(const MatrixXll& query_vectors, const MatrixX
 
 // Write results to output file
 void write_results(const string& output_file, 
-                   const vector<vector<QueryResult>>& all_results,
+                   vector<vector<QueryResult>>& all_results,
                    int top_k, 
                    const string& vector_norms_file) {
 
@@ -98,6 +98,11 @@ void write_results(const string& output_file,
     out << "QueryIndex\tAccession\tJaccard_Similarity" << endl;
 
     ifstream vector_norms_stream(vector_norms_file);
+
+    //sort all_results for each query by jaccard similarity in descending order
+    for (auto& results : all_results) {
+        sort(results.begin(), results.end());
+    }
     
     for (size_t query_idx = 0; query_idx < all_results.size(); ++query_idx) {
         
@@ -133,9 +138,8 @@ int main(int argc, char* argv[]) {
         clipp::required("--query") & clipp::value("file", query_file),
         clipp::required("--db") & clipp::value("folder", db_folder),
         clipp::required("--output") & clipp::value("file", output_file),
-        clipp::option("--num_threads") & clipp::value("int", num_threads),
-        clipp::option("--top_k") & clipp::value("int", top_k),
-        clipp::option("--help").set(show_help)
+        clipp::option("-t", "--num_threads") & clipp::value("int", num_threads),
+        clipp::option("--top_k").doc("Number of closest neighbors to return") & clipp::value("int", top_k)
     );
 
     if (!clipp::parse(argc, argv, cli) || show_help) {
