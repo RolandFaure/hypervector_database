@@ -1,6 +1,6 @@
 # 🧬 Hypervectors database
 
-This repository provides the hypervector database and the code needed to interact with it. The fundamental property of hypervectors is that the dot product between the hypervectors of datasets A and B is the size of their intersection.
+This repository provides the hypervector database and the code needed to interact with it. The fundamental property of hypervectors is that the dot product between the hypervectors of datasets A and B is on average the size of their intersection.
 
 ## Database Download
 
@@ -25,8 +25,8 @@ In the database, you will find four files:
 
 This repository contains scripts and tutorials for interacting with the database. Specifically, it includes:
 
-- (Scripts to sketch your own datasets)[#creating-hypervectors-of-your-datasets]
-- (Tools to compare sketched datasets against all SRA datasets published before December 2023)[#comparing-datasets-against-the-database]
+- [Scripts to sketch your own datasets](#creating-hypervectors-of-your-datasets)
+- [Tools to compare sketched datasets against all SRA datasets published before December 2023](#comparing-datasets-against-the-database)
 
 ### Installation
 
@@ -119,6 +119,16 @@ Finally, query the hypervector against the database to obtain the top 100 most s
 path/to/hypervector_database/bin/query --query DRR018843.bin --db path/to/hypervector_database --output DRR018843_results.tsv --top_k 100
 ```
 
+You should obtain a TSV file which looks like this:
+
+```
+QueryIndex      Accession       Jaccard_Similarity
+0       DRR018843       1
+0       DRR018849       0.238232
+0       DRR018904       0.199214
+0       DRR018911       0.189668
+0       DRR018892       0.182519
+```
 
 ## License
 
