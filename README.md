@@ -4,11 +4,7 @@ This repository provides the hypervector database and the code needed to interac
 
 ## Database Download
 
-The database is downloadable [here](https://drive.proton.me/urls/M9SG6CJ37W#IZz0B0LoLvX8):
-
-```
-wget https://drive.proton.me/urls/M9SG6CJ37W#IZz0B0LoLvX8
-```
+The database is downloadable [here](https://drive.proton.me/urls/M9SG6CJ37W#IZz0B0LoLvX8) (https://drive.proton.me/urls/M9SG6CJ37W#IZz0B0LoLvX8):
 
 ### Database Contents
 
