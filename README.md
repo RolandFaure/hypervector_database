@@ -33,7 +33,7 @@ Executables will be created in the `hypervector_database/bin/` directory.
 ### Creating Hypervectors of Your Datasets
 
 ```bash
-./bin/hypervector_database <input.fa> <output.bin>
+./bin/dna_to_vector <input.fa> <output.bin>
 ```
 
 #### Options
@@ -103,7 +103,7 @@ fastq-dump DRR018843
 Then, sketch the dataset to create a hypervector. Use the `reads` mode since this is a sequencing dataset, in order to filter out single-occurrence k-mers, which likely represent sequencing errors:
 
 ```bash
-path/to/hypervector_database/bin/hypervector_database DRR018843.fastq DRR018843.bin -m reads
+path/to/hypervector_database/bin/dna_to_vector DRR018843.fastq DRR018843.bin -m reads
 ```
 
 Finally, query the hypervector against the database to obtain the top 100 most similar SRA datasets:
