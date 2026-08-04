@@ -1,4 +1,4 @@
-# 🧬 SRA metagenomes hypervectors database
+# SRA metagenomes hypervectors
 
 This repository provides the database containing the hypervector sketches of all metagenomic accession of the SRA before December 2023, and the code needed to interact with it. You can directly interact with the database through the [similarity.logan-search.org](similarity.logan-search.org) website or you can download it locally (~50GB). The fundamental property of hypervectors is that the dot product between the hypervectors of datasets A and B is on average the size of their intersection.
 
