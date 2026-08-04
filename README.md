@@ -2,17 +2,15 @@
 
 This repository provides the database containing the hypervector sketches of all metagenomic accession of the SRA before December 2023, and the code needed to interact with it. You can directly interact with the database through the [similarity.logan-search.org](similarity.logan-search.org) website or you can download it locally (~50GB). The fundamental property of hypervectors is that the dot product between the hypervectors of datasets A and B is on average the size of their intersection.
 
-## Interacting with the Database
-
 This repository contains scripts and tutorials for interacting with the database. Specifically, it includes:
 
-- [Scripts to sketch your own datasets](#creating-hypervectors-of-your-datasets)
+- [Scripts to sketch your own datasets](#creating-hypervectors-from-custom-datasets)
 - [Instructions to download the hypervector database locally](#database-download)
 - [Tools to compare locally sketched datasets against all SRA datasets](#comparing-datasets-against-the-database)
 
-### Installation
+## Creating hypervectors from custom datasets
 
-#### Download and Build
+### Installation
 
 Install the required dependencies:
 
@@ -33,8 +31,6 @@ make
 Executables will be created in the `hypervector_database/bin/` directory.
 
 ### Creating Hypervectors of Your Datasets
-
-#### Basic Usage
 
 ```bash
 ./bin/hypervector_database <input.fa> <output.bin>
@@ -59,7 +55,7 @@ Executables will be created in the `hypervector_database/bin/` directory.
 
 #### Output Format
 
-The `.bin` file contains a byte-packed vector where each value is stored as an int32. Values should be divided by sqrt(d) before local usage or uploaded as such in other commands of this tool suite.
+The `.bin` file contains a byte-packed vector where each value is stored as an int32. Values should be divided by sqrt(d) before local usage or uploaded as such on similarity.logan-search.org and in other commands of this tool suite.
 
 ## Database Download
 
