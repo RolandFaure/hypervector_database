@@ -15,9 +15,9 @@ This repository contains scripts and tutorials for interacting with the database
 Install the required dependencies:
 
 ```bash
-conda install -c bioconda sourmash
+conda install main::pkg-config conda-forge::sourmash-minimal conda-forge::eigen
 # or
-pip install sourmash
+pip install sourmash pkgconfig eigen
 ```
 
 Clone the repository and build the project:
@@ -28,12 +28,17 @@ cd hypervector_database
 make
 ```
 
-Executables will be created in the `hypervector_database/bin/` directory.
-
-### Creating Hypervectors of Your Datasets
+Executables will be created in the `hypervector_database/bin/` directory. Check the installation by running:
 
 ```bash
-./bin/hypervector_database <input.fa> <output.bin>
+./bin/dna_to_vector --help
+```
+
+### Creating Hypervectors of Your Datasets
+The input file can be a fasta or fastq file, optionally gzipped. The output is a binary file containing the hypervector of your dataset.
+
+```bash
+./bin/dna_to_vector <input.fa/fq[.gz]> <output.bin>
 ```
 
 #### Options
@@ -93,9 +98,10 @@ This returns a TSV file with the top `k` most similar accessions in the SRA (up 
 ## Tutorial
 
 Let's find the most similar SRA datasets to DRR018843. In practice, this will work with any dataset.
-First, download the DRR018843 reads:
+First, download the DRR018843 reads with the sra-tools `fastq-dump` command:
 
 ```bash
+conda install bioconda::sra-tools #if not already installed
 fastq-dump DRR018843
 #or go on https://trace.ncbi.nlm.nih.gov/Traces/?view=run_browser&acc=DRR018843 and manually download
 ```
@@ -103,7 +109,7 @@ fastq-dump DRR018843
 Then, sketch the dataset to create a hypervector. Use the `reads` mode since this is a sequencing dataset, in order to filter out single-occurrence k-mers, which likely represent sequencing errors:
 
 ```bash
-path/to/hypervector_database/bin/hypervector_database DRR018843.fastq DRR018843.bin -m reads
+path/to/hypervector_database/bin/dna_to_vector DRR018843.fastq DRR018843.bin -m reads
 ```
 
 Finally, query the hypervector against the database to obtain the top 100 most similar SRA datasets:
