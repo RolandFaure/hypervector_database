@@ -31,6 +31,7 @@ make
 Executables will be created in the `hypervector_database/bin/` directory. Check the installation by running:
 
 ```bash
+<<<<<<< HEAD
 ./bin/dna_to_vector --help
 ```
 
@@ -39,6 +40,9 @@ The input file can be a fasta or fastq file, optionally gzipped. The output is a
 
 ```bash
 ./bin/dna_to_vector <input.fa/fq[.gz]> <output.bin>
+=======
+./bin/dna_to_vector <input.fa> <output.bin>
+>>>>>>> 9f2cbad58075cf9d982faed1b798d6f209bd98d6
 ```
 
 #### Options
