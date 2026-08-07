@@ -12,12 +12,10 @@ This repository contains scripts and tutorials for interacting with the database
 
 ### Installation
 
-Install the required dependencies:
+Install the required dependencies, for example with conda:
 
 ```bash
 conda install main::pkg-config conda-forge::sourmash-minimal conda-forge::eigen
-# or
-pip install sourmash pkgconfig eigen
 ```
 
 Clone the repository and build the project:
